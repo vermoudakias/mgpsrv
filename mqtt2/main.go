@@ -48,13 +48,19 @@ func test_pub() {
 	for i := 0; i < *count; i++ {
 		text := fmt.Sprintf("%s #%d", *msg, i)
 		token := c.Publish(*topic, byte(*qos), false, text)
-		token.Wait()
-		fmt.Printf("Published msg qos[%d] topic[%s] payload[%s]\n",
-			*qos, *topic, text)
+		if token == nil {
+			fmt.Printf("Publish failed\n")
+		} else {
+			token.Wait()
+			fmt.Printf("Published msg qos[%d] topic[%s] payload[%s]\n",
+				*qos, *topic, text)
+		}
 	}
 	// Publish the end-of-test message
 	token := c.Publish(*topic, byte(*qos), false, end_of_test)
-	token.Wait()
+	if token != nil {
+		token.Wait()
+	}
 
 	c.Disconnect(250)
 }
