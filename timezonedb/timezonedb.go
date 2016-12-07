@@ -22,18 +22,19 @@ type TimezoneDBResponse struct {
 
 func main() {
 	flag.Parse()
-	if len(flag.Args()) < 2 {
-		log.Fatal("Args: <latitude> <longitude>")
+	if len(flag.Args()) < 3 {
+		log.Fatal("Args: <key> <latitude> <longitude>")
 	}
-	var lat, lng string
-	lat = flag.Args()[0]
-	lng = flag.Args()[1]
+	var key, lat, lng string
+	key = flag.Args()[0]
+	lat = flag.Args()[1]
+	lng = flag.Args()[2]
 	req, err := http.NewRequest("GET", "http://api.timezonedb.com", nil)
 	if err != nil {
 		log.Fatal(err)
 	}
 	qparams := req.URL.Query()
-	qparams.Add("key", "XXXXXXXX")
+	qparams.Add("key", key)
 	qparams.Add("format", "json")
 	qparams.Add("lat", lat)
 	qparams.Add("lng", lng)
